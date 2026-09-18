@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  mysql_db:
+    image: mysql:8.0
+    container_name: mysql_db
+    environment:
+      MYSQL_DATABASE: demo
+      MYSQL_ROOT_PASSWORD: sua_senha
+    ports:
+      - "3306:3306"
+    networks:
+      - app-net
+
+  api:
+    build: .
+    container_name: spring_api
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql_db
+    networks:
+      - app-net
+
+networks:
+  app-net:
+    driver: bridge
