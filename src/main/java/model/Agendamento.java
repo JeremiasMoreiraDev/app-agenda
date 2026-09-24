@@ -20,6 +20,10 @@ public class Agendamento {
     @JoinColumn(name = "servico_id")
     private Servico servico;
 
+    @ManyToOne
+    @JoinColumn(name = "colaborador_id")
+    private Colaborador colaborador;
+
     private LocalDateTime dataSolicitacao;
     private LocalDateTime dataAgendada;
     private String status; // PENDENTE, CONFIRMADO, CONCLUIDO, CANCELADO

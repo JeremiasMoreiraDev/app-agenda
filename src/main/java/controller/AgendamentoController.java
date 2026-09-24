@@ -48,4 +48,17 @@ public class AgendamentoController {
         }
         return ResponseEntity.notFound().build();
     }
+
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<Agendamento> atualizarStatus(
+            @PathVariable Long id,
+            @RequestParam String novoStatus) {
+        try {
+            // Corrigido de agendamentoService para service (que é o nome injetado acima)
+            Agendamento agendamentoAtualizado = service.atualizarStatus(id, novoStatus);
+            return ResponseEntity.ok(agendamentoAtualizado);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }
