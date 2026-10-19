@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#FAFAFA">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:background="#00796B">
+
+        <Button
+            android:id="@+id/btnVoltarCadastro"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:minWidth="0dp"
+            android:padding="0dp"
+            android:text="←"
+            android:textSize="26sp"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#00796B"
+            android:contentDescription="Voltar" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:text="Cadastrar produto"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF" />
+
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Dados do produto"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:textColor="#173D36" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Preencha os campos abaixo. Os campos com * são obrigatórios."
+                android:textSize="14sp"
+                android:textColor="#555555" />
+
+            <EditText
+                android:id="@+id/edtNome"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="56dp"
+                android:layout_marginTop="20dp"
+                android:hint="Nome do produto *"
+                android:inputType="textCapSentences"
+                android:maxLength="150"
+                android:textSize="16sp"
+                android:textColor="#173D36"
+                android:textColorHint="#666666" />
+
+            <EditText
+                android:id="@+id/edtCategoria"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="56dp"
+                android:layout_marginTop="12dp"
+                android:hint="Categoria *"
+                android:inputType="textCapSentences"
+                android:maxLength="100"
+                android:textSize="16sp"
+                android:textColor="#173D36"
+                android:textColorHint="#666666" />
+
+            <EditText
+                android:id="@+id/edtDescricao"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="100dp"
+                android:layout_marginTop="12dp"
+                android:gravity="top|start"
+                android:hint="Descrição"
+                android:inputType="textMultiLine|textCapSentences"
+                android:maxLength="2000"
+                android:textSize="16sp"
+                android:textColor="#173D36"
+                android:textColorHint="#666666" />
+
+            <EditText
+                android:id="@+id/edtPreco"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="56dp"
+                android:layout_marginTop="12dp"
+                android:hint="Preço em reais * — exemplo: 500,00"
+                android:inputType="numberDecimal"
+                android:textSize="16sp"
+                android:textColor="#173D36"
+                android:textColorHint="#666666" />
+
+            <EditText
+                android:id="@+id/edtEstoque"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="56dp"
+                android:layout_marginTop="12dp"
+                android:hint="Quantidade em estoque *"
+                android:inputType="number"
+                android:textSize="16sp"
+                android:textColor="#173D36"
+                android:textColorHint="#666666" />
+
+            <EditText
+                android:id="@+id/edtUrlImagem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="56dp"
+                android:layout_marginTop="12dp"
+                android:hint="Link da imagem (https://...)"
+                android:inputType="textUri"
+                android:maxLength="1000"
+                android:textSize="16sp"
+                android:textColor="#173D36"
+                android:textColorHint="#666666" />
+
+            <TextView
+                android:id="@+id/txtStatusCadastro"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:textColor="#555555"
+                android:textSize="14sp"
+                android:accessibilityLiveRegion="polite" />
+
+            <Button
+                android:id="@+id/btnSalvarProduto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="56dp"
+                android:layout_marginTop="12dp"
+                android:text="Salvar produto"
+                android:textAllCaps="false"
+                android:textSize="16sp"
+                android:textColor="#FFFFFF"
+                android:backgroundTint="#00796B" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
