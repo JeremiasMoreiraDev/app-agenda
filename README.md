@@ -201,3 +201,30 @@ Para continuar esta entrega, abra `CatalogoProdutos` dentro da cópia do reposit
 
 Antes de enviar alterações, confira `git status` e a branch. Não versione senhas, `local.properties`, configurações pessoais da IDE ou pastas de build. As alterações devem passar pela revisão da equipe antes da incorporação à `main`.
 
+
+## Importar o produto de demonstração
+
+Com a API e o MySQL em execução, abra o PowerShell na pasta que contém
+`produtos-exemplo.json` e execute:
+
+```powershell
+$produtos = Get-Content -Raw -Encoding UTF8 ".\produtos-exemplo.json" | ConvertFrom-Json
+
+foreach ($produto in $produtos) {
+    $json = $produto | ConvertTo-Json -Depth 5
+    $corpo = [System.Text.Encoding]::UTF8.GetBytes($json)
+
+    Invoke-RestMethod -Method Post `
+        -Uri "http://localhost:8080/api/produtos" `
+        -ContentType "application/json; charset=utf-8" `
+        -Body $corpo
+}
+```
+
+Execute somente uma vez no banco de demonstração: repetir a importação
+cria outro produto. Se o exemplo já estiver cadastrado, não execute.
+Depois, toque em "Atualizar produtos" no aplicativo.
+
+A foto é ilustrativa: "Monocrystalline silicon solar panel", de ArticCynda,
+disponibilizada como CC0 no Wikimedia Commons:
+https://commons.wikimedia.org/wiki/File:Monocrystalline_silicon_solar_panel.jpg

@@ -1,0 +1,10 @@
+﻿[
+  {
+    "nome": "Painel Solar - TESTE",
+    "descricao": "Produto ficticio para testar o catalogo.",
+    "categoria": "Paineis solares",
+    "preco": 500.00,
+    "quantidadeEstoque": 10,
+    "urlImagem": "https://upload.wikimedia.org/wikipedia/commons/d/d6/Monocrystalline_silicon_solar_panel.jpg"
+  }
+]
