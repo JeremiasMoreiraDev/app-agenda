@@ -27,7 +27,9 @@ public class ProdutoService {
     public Produto buscarPorId(Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
-                        HttpStatus.NOT_FOUND, "Produto não encontrado"));
+                        HttpStatus.NOT_FOUND,
+                        "Produto não encontrado"
+                ));
     }
 
     public Produto cadastrar(Produto produto) {
@@ -40,8 +42,9 @@ public class ProdutoService {
     }
 
     public Produto atualizar(Long id, Produto dados) {
-        Produto produto = buscarPorId(id);
         validar(dados);
+
+        Produto produto = buscarParaAlteracao(id);
 
         produto.setNome(dados.getNome());
         produto.setDescricao(dados.getDescricao());
@@ -54,9 +57,18 @@ public class ProdutoService {
     }
 
     public void desativar(Long id) {
-        Produto produto = buscarPorId(id);
+        Produto produto = buscarParaAlteracao(id);
         produto.setAtivo(false);
+
         repository.save(produto);
+    }
+
+    private Produto buscarParaAlteracao(Long id) {
+        return repository.buscarPorIdComBloqueio(id)
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND,
+                        "Produto não encontrado"
+                ));
     }
 
     private void validar(Produto produto) {
@@ -64,7 +76,8 @@ public class ProdutoService {
             throw erro("Informe os dados do produto");
         }
 
-        if (produto.getNome() == null || produto.getNome().isBlank()) {
+        if (produto.getNome() == null
+                || produto.getNome().isBlank()) {
             throw erro("O nome é obrigatório");
         }
 
@@ -81,28 +94,43 @@ public class ProdutoService {
         BigDecimal preco = produto.getPreco();
 
         if (preco == null || preco.signum() < 0) {
-            throw erro("O preço é obrigatório e não pode ser negativo");
+            throw erro(
+                    "O preço é obrigatório e não pode ser negativo"
+            );
         }
 
         if (preco.compareTo(new BigDecimal("9999999999.99")) > 0
                 || preco.stripTrailingZeros().scale() > 2) {
-            throw erro("O preço deve ter até 10 dígitos inteiros e 2 decimais");
+            throw erro(
+                    "O preço deve ter até 10 dígitos inteiros "
+                            + "e 2 decimais"
+            );
         }
 
         if (produto.getQuantidadeEstoque() == null
                 || produto.getQuantidadeEstoque() < 0) {
-            throw erro("O estoque é obrigatório e não pode ser negativo");
+            throw erro(
+                    "O estoque é obrigatório e não pode ser negativo"
+            );
         }
     }
 
-    private void validarTamanho(String texto, int limite, String campo) {
+    private void validarTamanho(
+            String texto,
+            int limite,
+            String campo
+    ) {
         if (texto != null && texto.length() > limite) {
-            throw erro(campo + " deve ter até " + limite + " caracteres");
+            throw erro(
+                    campo + " deve ter até " + limite + " caracteres"
+            );
         }
     }
 
     private ResponseStatusException erro(String mensagem) {
         return new ResponseStatusException(
-                HttpStatus.BAD_REQUEST, mensagem);
+                HttpStatus.BAD_REQUEST,
+                mensagem
+        );
     }
 }
