@@ -124,6 +124,17 @@ public class PedidoService {
             produto.setQuantidadeEstoque(estoque - quantidade);
         }
 
+        BigDecimal totalEsperado = requisicao.totalEsperado();
+
+        if (totalEsperado != null
+                && total.compareTo(totalEsperado) != 0) {
+            throw erro(
+                    HttpStatus.CONFLICT,
+                    "Os preços foram atualizados. "
+                            + "Revise o carrinho antes de confirmar."
+            );
+        }
+
         pedido.setTotal(total);
 
         /*
@@ -236,6 +247,24 @@ public class PedidoService {
             conteudo.append(entrada.getKey())
                     .append(":")
                     .append(entrada.getValue())
+                    .append(";");
+        }
+
+        if (requisicao.totalEsperado() != null) {
+            BigDecimal esperado = requisicao.totalEsperado();
+
+            if (esperado.signum() < 0
+                    || esperado.compareTo(TOTAL_MAXIMO) > 0
+                    || esperado.stripTrailingZeros().scale() > 2) {
+                throw erro(
+                        HttpStatus.BAD_REQUEST,
+                        "O total esperado deve ser um valor válido "
+                                + "com até duas casas decimais."
+                );
+            }
+
+            conteudo.append("total:")
+                    .append(esperado.stripTrailingZeros().toPlainString())
                     .append(";");
         }
 

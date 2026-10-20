@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import java.util.UUID;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -239,6 +240,12 @@ public class Carrinho {
     }
 
     private void salvar(List<Item> itens) {
+        if (temPedidoPendente()) {
+            throw new IllegalStateException(
+                    "Existe uma confirmação pendente. "
+                            + "Abra o carrinho para verificar o resultado."
+            );
+        }
         JSONArray dados = new JSONArray();
 
         try {
@@ -270,5 +277,173 @@ public class Carrinho {
                     "Não foi possível salvar o carrinho no celular."
             );
         }
+    }
+    public boolean temPedidoPendente() {
+        return preferencias.contains("pedido_pendente");
+    }
+
+    public String obterPedidoPendente() {
+        return preferencias.getString("pedido_pendente", null);
+    }
+
+    public String prepararPedido() {
+        String pendente = obterPedidoPendente();
+
+        if (pendente != null) {
+            return pendente;
+        }
+
+        List<Item> itens = listar();
+
+        if (itens.isEmpty()) {
+            throw new IllegalStateException(
+                    "Adicione produtos antes de confirmar."
+            );
+        }
+
+        if (itens.size() > 100) {
+            throw new IllegalStateException(
+                    "O pedido permite até 100 produtos diferentes."
+            );
+        }
+
+        JSONArray produtos = new JSONArray();
+        BigDecimal total = BigDecimal.ZERO;
+
+        try {
+            for (Item item : itens) {
+                JSONObject produto = new JSONObject();
+
+                produto.put("produtoId", item.getProdutoId());
+                produto.put("quantidade", item.getQuantidade());
+
+                produtos.put(produto);
+                total = total.add(item.getSubtotal());
+            }
+
+            JSONObject pedido = new JSONObject();
+
+            pedido.put(
+                    "chaveConfirmacao",
+                    UUID.randomUUID().toString()
+            );
+            pedido.put("totalEsperado", total.toPlainString());
+            pedido.put("itens", produtos);
+
+            String conteudo = pedido.toString();
+
+            boolean salvo = preferencias.edit()
+                    .putString("pedido_pendente", conteudo)
+                    .commit();
+
+            if (!salvo) {
+                throw new IllegalStateException(
+                        "Não foi possível guardar a confirmação. "
+                                + "O pedido não será enviado."
+                );
+            }
+
+            return conteudo;
+
+        } catch (JSONException erro) {
+            throw new IllegalStateException(
+                    "Não foi possível preparar o pedido.",
+                    erro
+            );
+        }
+    }
+
+    public void concluirPedido(String resposta) {
+        String pendente = obterPedidoPendente();
+
+        if (pendente == null) {
+            throw new IllegalStateException(
+                    "Não há confirmação pendente para este carrinho."
+            );
+        }
+
+        try {
+            JSONObject enviado = new JSONObject(pendente);
+            JSONObject recebido = new JSONObject(resposta);
+
+            boolean mesmaChave = enviado.getString("chaveConfirmacao")
+                    .equals(recebido.getString("chaveConfirmacao"));
+
+            BigDecimal esperado = new BigDecimal(
+                    enviado.getString("totalEsperado")
+            );
+
+            BigDecimal confirmado = new BigDecimal(
+                    recebido.getString("total")
+            );
+
+            if (!mesmaChave
+                    || recebido.getLong("id") <= 0
+                    || esperado.compareTo(confirmado) != 0) {
+                throw new IllegalStateException(
+                        "A resposta não corresponde à confirmação enviada. "
+                                + "O carrinho foi preservado."
+                );
+            }
+
+            boolean salvo = preferencias.edit()
+                    .putString("ultimo_pedido", resposta)
+                    .remove(CHAVE_ITENS)
+                    .remove("pedido_pendente")
+                    .commit();
+
+            if (!salvo) {
+                throw new IllegalStateException(
+                        "O pedido foi confirmado, mas houve uma falha "
+                                + "ao salvar o comprovante no celular."
+                );
+            }
+
+        } catch (JSONException | NumberFormatException erro) {
+            throw new IllegalStateException(
+                    "Não foi possível interpretar a confirmação. "
+                            + "Verifique novamente o resultado.",
+                    erro
+            );
+        }
+    }
+
+    public void liberarPedidoRecusado(String chaveConfirmacao) {
+        String pendente = obterPedidoPendente();
+
+        if (pendente == null) {
+            return;
+        }
+
+        try {
+            JSONObject enviado = new JSONObject(pendente);
+
+            if (!enviado.getString("chaveConfirmacao")
+                    .equals(chaveConfirmacao)) {
+                throw new IllegalStateException(
+                        "A confirmação pendente foi alterada."
+                );
+            }
+
+            boolean salvo = preferencias.edit()
+                    .remove("pedido_pendente")
+                    .commit();
+
+            if (!salvo) {
+                throw new IllegalStateException(
+                        "Não foi possível atualizar a confirmação local."
+                );
+            }
+
+        } catch (JSONException erro) {
+            throw new IllegalStateException(
+                    "Não foi possível ler a confirmação pendente.",
+                    erro
+            );
+        }
+    }
+
+    public String obterUltimoPedido() {
+        return preferencias.getString("ultimo_pedido", null);
     }
 }
