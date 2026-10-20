@@ -143,6 +143,80 @@ public class DetalheProdutoActivity extends AppCompatActivity {
                 view -> confirmarDesativacao()
         );
 
+        Button btnAdicionarCarrinho = findViewById(
+                R.id.btnAdicionarCarrinho
+        );
+
+        Button btnVerCarrinho = findViewById(
+                R.id.btnVerCarrinho
+        );
+
+        btnAdicionarCarrinho.setVisibility(
+                modoAdmin ? View.GONE : View.VISIBLE
+        );
+
+        btnVerCarrinho.setVisibility(
+                modoAdmin ? View.GONE : View.VISIBLE
+        );
+
+        int estoqueInformado = getIntent().getIntExtra(
+                "quantidadeEstoque", 0
+        );
+
+        btnAdicionarCarrinho.setEnabled(
+                idValido && estoqueInformado > 0
+        );
+
+        if (estoqueInformado <= 0) {
+            btnAdicionarCarrinho.setText("Produto indisponível");
+        }
+
+        btnAdicionarCarrinho.setOnClickListener(view -> {
+            Intent dados = getIntent();
+
+            try {
+                String valor = dados.getStringExtra("preco");
+
+                if (valor == null || valor.trim().isEmpty()) {
+                    throw new IllegalArgumentException(
+                            "Preço não informado para este produto."
+                    );
+                }
+
+                Carrinho carrinho = new Carrinho(this);
+
+                carrinho.adicionar(
+                        dados.getLongExtra("id", -1L),
+                        dados.getStringExtra("nome"),
+                        new BigDecimal(valor),
+                        dados.getStringExtra("urlImagem"),
+                        dados.getIntExtra("quantidadeEstoque", 0)
+                );
+
+                Toast.makeText(
+                        this,
+                        "Produto adicionado ao carrinho!",
+                        Toast.LENGTH_SHORT
+                ).show();
+
+            } catch (IllegalArgumentException | IllegalStateException erro) {
+                Toast.makeText(
+                        this,
+                        erro.getMessage(),
+                        Toast.LENGTH_LONG
+                ).show();
+            }
+        });
+
+        btnVerCarrinho.setOnClickListener(view -> {
+            Intent tela = new Intent(
+                    this,
+                    CarrinhoActivity.class
+            );
+
+            startActivity(tela);
+        });
+
         mostrarProduto();
     }
 

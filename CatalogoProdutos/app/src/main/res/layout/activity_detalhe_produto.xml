@@ -126,7 +126,37 @@
                 android:lineSpacingExtra="4dp"
                 android:textColor="#555555"
                 tools:text="Produto fictício para testar o catálogo." />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnAdicionarCarrinho"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:minHeight="52dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:text="Adicionar ao carrinho"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:backgroundTint="#00796B"
+                android:visibility="gone" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnVerCarrinho"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:minHeight="52dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:text="Ver carrinho"
+                android:textAllCaps="false"
+                android:textColor="#00796B"
+                android:textSize="16sp"
+                android:backgroundTint="#E6F3F0"
+                android:visibility="gone" />
             <Button
+
                 android:id="@+id/btnEditarProduto"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
