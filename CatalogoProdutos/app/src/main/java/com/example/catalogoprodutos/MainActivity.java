@@ -121,10 +121,12 @@ public class MainActivity extends AppCompatActivity {
                 }
         );
 
+        btnCadastrar.setText("Administrar produtos (teste)");
+
         btnCadastrar.setOnClickListener(view -> {
             Intent tela = new Intent(
                     MainActivity.this,
-                    CadastroProdutoActivity.class
+                    AdminProdutosActivity.class
             );
 
             abrirCadastro.launch(tela);

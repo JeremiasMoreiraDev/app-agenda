@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import android.view.View;
 
 import com.bumptech.glide.Glide;
 
@@ -105,10 +106,22 @@ public class DetalheProdutoActivity extends AppCompatActivity {
         btnEditarProduto = findViewById(R.id.btnEditarProduto);
         btnDesativarProduto = findViewById(R.id.btnDesativarProduto);
 
+        boolean modoAdmin = getIntent().getBooleanExtra(
+                "modo_admin", false
+        );
+
         boolean idValido = getIntent().getLongExtra("id", -1L) > 0;
 
-        btnEditarProduto.setEnabled(idValido);
-        btnDesativarProduto.setEnabled(idValido);
+        btnEditarProduto.setVisibility(
+                modoAdmin ? View.VISIBLE : View.GONE
+        );
+
+        btnDesativarProduto.setVisibility(
+                modoAdmin ? View.VISIBLE : View.GONE
+        );
+
+        btnEditarProduto.setEnabled(modoAdmin && idValido);
+        btnDesativarProduto.setEnabled(modoAdmin && idValido);
 
         findViewById(R.id.btnVoltar).setOnClickListener(view -> {
             if (!desativando) {
