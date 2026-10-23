@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:padding="12dp"
+    android:background="@drawable/fundo_card_catalogo">
+
+    <ImageView
+        android:id="@+id/imgProduto"
+        android:layout_width="88dp"
+        android:layout_height="104dp"
+        android:padding="6dp"
+        android:background="@drawable/fundo_imagem_produto"
+        android:scaleType="fitCenter"
+        android:src="@android:drawable/ic_menu_gallery"
+        android:contentDescription="Foto do produto" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginStart="12dp"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/txtNome"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="3"
+            android:ellipsize="end"
+            android:textColor="#173D36"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            tools:text="Painel Solar - TESTE" />
+        <TextView
+            android:id="@+id/txtCategoria"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:textColor="#586E75"
+            android:textSize="13sp"
+            tools:text="Painéis solares" />
+        <TextView
+            android:id="@+id/txtPreco"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textColor="#173D36"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            tools:text="R$ 1.200,00" />
+        <TextView
+            android:id="@+id/txtEstoque"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textColor="#00796B"
+            android:textSize="12sp"
+            tools:text="Disponível" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="16dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:gravity="center"
+        android:text="›"
+        android:textSize="26sp"
+        android:textColor="#748C91"
+        android:importantForAccessibility="no" />
+</LinearLayout>

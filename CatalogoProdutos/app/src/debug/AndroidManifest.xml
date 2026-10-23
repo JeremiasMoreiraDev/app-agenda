@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application>
+
+        <activity
+            android:name="com.example.catalogoprodutos.AdminProdutosActivity"
+            android:taskAffinity="com.example.catalogoprodutos.admin_demo" />
+
+        <!-- Atalho disponível somente na versão debug. -->
+        <activity-alias
+            android:name="com.example.catalogoprodutos.AdminProdutosDemo"
+            android:targetActivity="com.example.catalogoprodutos.AdminProdutosActivity"
+            android:exported="true"
+            android:label="Admin produtos (teste)">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity-alias>
+
+    </application>
+
+</manifest>

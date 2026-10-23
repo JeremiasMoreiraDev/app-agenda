@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#FAFAFA">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="64dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="8dp"
+        android:background="#00796B">
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/btnVoltar"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:padding="12dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Voltar"
+            app:srcCompat="@drawable/ic_voltar" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="Detalhes do produto"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnVerCarrinho"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:padding="12dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:contentDescription="Ver carrinho"
+            android:visibility="gone"
+            app:backgroundTint="@android:color/transparent"
+            app:icon="@drawable/ic_carrinho_detalhe"
+            app:iconSize="24dp"
+            app:iconPadding="0dp"
+            app:iconTint="#FFFFFF" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true"
+        android:clipToPadding="false">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <ImageView
+                android:id="@+id/imgDetalheProduto"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:background="@drawable/fundo_imagem_produto"
+                android:padding="16dp"
+                android:contentDescription="Foto do produto"
+                android:scaleType="fitCenter"
+                android:src="@android:drawable/ic_menu_gallery" />
+
+            <TextView
+                android:id="@+id/txtDetalheNome"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:textColor="#173D36"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                tools:text="Painel Solar - TESTE" />
+
+            <TextView
+                android:id="@+id/txtDetalheCategoria"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:textColor="#586E75"
+                android:textSize="14sp"
+                tools:text="Painéis solares" />
+
+            <TextView
+                android:id="@+id/txtDetalhePreco"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:textColor="#00796B"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                tools:text="R$ 500,00" />
+
+            <TextView
+                android:id="@+id/txtDetalheEstoque"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:textColor="#586E75"
+                android:textSize="14sp"
+                tools:text="Em estoque: 7 unidade(s)" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Descrição"
+                android:textColor="#173D36"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txtDetalheDescricao"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:lineSpacingExtra="4dp"
+                android:textColor="#586E75"
+                android:textSize="15sp"
+                tools:text="Produto fictício para testar o catálogo." />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnAdicionarCarrinho"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:minHeight="52dp"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:text="Adicionar ao carrinho"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:visibility="gone"
+                app:backgroundTint="#00796B"
+                app:cornerRadius="12dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnEditarProduto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:minHeight="52dp"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:text="Editar produto"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:visibility="gone"
+                app:backgroundTint="#00796B"
+                app:cornerRadius="12dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnDesativarProduto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:minHeight="52dp"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:text="Desativar produto"
+                android:textAllCaps="false"
+                android:textColor="#B3261E"
+                android:textSize="16sp"
+                android:visibility="gone"
+                app:backgroundTint="#FFFFFF"
+                app:cornerRadius="12dp" app:strokeColor="#B3261E" app:strokeWidth="1dp" />
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

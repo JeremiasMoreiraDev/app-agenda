@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#FAFAFA">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="64dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="8dp"
+        android:background="#00796B">
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/btnVoltarCadastro"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:padding="12dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Voltar"
+            app:srcCompat="@drawable/ic_voltar" />
+
+        <TextView
+            android:id="@+id/txtTituloCadastro"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="Cadastrar produto"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true"
+        android:clipToPadding="false">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Dados do produto"
+                android:textColor="#173D36"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Preencha os dados abaixo. Os campos com * são obrigatórios."
+                android:textColor="#586E75"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:labelFor="@+id/edtNome"
+                android:text="Nome do produto *"
+                android:textColor="#173D36"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/edtNome"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="56dp"
+                android:layout_marginTop="8dp"
+                android:padding="14dp"
+                android:background="@drawable/fundo_campo_produto"
+                app:backgroundTint="@null"
+                android:gravity="center_vertical|start"
+                android:hint="Ex.: Painel solar"
+                android:inputType="textCapSentences"
+                android:textColor="#173D36"
+                android:textColorHint="#586E75"
+                android:textSize="16sp" android:maxLength="150" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:labelFor="@+id/edtCategoria"
+                android:text="Categoria *"
+                android:textColor="#173D36"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/edtCategoria"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="56dp"
+                android:layout_marginTop="8dp"
+                android:padding="14dp"
+                android:background="@drawable/fundo_campo_produto"
+                app:backgroundTint="@null"
+                android:gravity="center_vertical|start"
+                android:hint="Ex.: Painéis solares"
+                android:inputType="textCapSentences"
+                android:textColor="#173D36"
+                android:textColorHint="#586E75"
+                android:textSize="16sp" android:maxLength="100" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:labelFor="@+id/edtDescricao"
+                android:text="Descrição"
+                android:textColor="#173D36"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/edtDescricao"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="120dp"
+                android:layout_marginTop="8dp"
+                android:padding="14dp"
+                android:background="@drawable/fundo_campo_produto"
+                app:backgroundTint="@null"
+                android:gravity="top|start"
+                android:hint="Características e informações do produto"
+                android:inputType="textMultiLine|textCapSentences"
+                android:textColor="#173D36"
+                android:textColorHint="#586E75"
+                android:textSize="16sp" android:maxLength="2000" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:labelFor="@+id/edtPreco"
+                android:text="Preço em reais *"
+                android:textColor="#173D36"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/edtPreco"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="56dp"
+                android:layout_marginTop="8dp"
+                android:padding="14dp"
+                android:background="@drawable/fundo_campo_produto"
+                app:backgroundTint="@null"
+                android:gravity="center_vertical|start"
+                android:hint="Ex.: 500,00"
+                android:inputType="numberDecimal"
+                android:textColor="#173D36"
+                android:textColorHint="#586E75"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="Use vírgula ou ponto para os centavos, sem separador de milhares."
+                android:textColor="#586E75"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:labelFor="@+id/edtEstoque"
+                android:text="Quantidade em estoque *"
+                android:textColor="#173D36"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/edtEstoque"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="56dp"
+                android:layout_marginTop="8dp"
+                android:padding="14dp"
+                android:background="@drawable/fundo_campo_produto"
+                app:backgroundTint="@null"
+                android:gravity="center_vertical|start"
+                android:hint="Ex.: 10"
+                android:inputType="number"
+                android:textColor="#173D36"
+                android:textColorHint="#586E75"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:labelFor="@+id/edtUrlImagem"
+                android:text="Link da imagem"
+                android:textColor="#173D36"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/edtUrlImagem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="56dp"
+                android:layout_marginTop="8dp"
+                android:padding="14dp"
+                android:background="@drawable/fundo_campo_produto"
+                app:backgroundTint="@null"
+                android:gravity="center_vertical|start"
+                android:hint="https://..."
+                android:inputType="textUri"
+                android:textColor="#173D36"
+                android:textColorHint="#586E75"
+                android:textSize="16sp" android:maxLength="1000" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="Opcional. Informe um endereço HTTPS ou deixe o campo vazio."
+                android:textColor="#586E75"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/txtStatusCadastro"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:textColor="#586E75"
+                android:textSize="14sp"
+                android:accessibilityLiveRegion="polite" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSalvarProduto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:minHeight="52dp"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:text="Salvar produto"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                app:backgroundTint="#00796B"
+                app:cornerRadius="12dp" />
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
