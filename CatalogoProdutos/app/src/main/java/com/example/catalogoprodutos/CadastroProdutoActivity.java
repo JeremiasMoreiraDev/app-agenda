@@ -97,7 +97,14 @@ public class CadastroProdutoActivity extends AppCompatActivity {
         btnSalvarProduto.setOnClickListener(view -> salvarProduto());
         produtoId = getIntent().getLongExtra("id", -1L);
 
+        TextView titulo = findViewById(R.id.txtTituloCadastro);
+        titulo.setText(produtoId > 0 ? "Editar produto" : "Cadastrar produto");
+
         if (produtoId > 0) {
+            btnSalvarProduto.setText("Salvar alterações");
+        }
+
+        if (produtoId > 0 && savedInstanceState == null) {
             Intent dados = getIntent();
 
             edtNome.setText(dados.getStringExtra("nome"));

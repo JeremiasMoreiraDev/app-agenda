@@ -32,7 +32,6 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.bumptech.glide.Glide;
 import com.google.android.material.button.MaterialButton;
 
 import java.math.BigDecimal;
@@ -91,10 +90,13 @@ public class CarrinhoActivity extends AppCompatActivity {
         txtStatus = findViewById(R.id.txtStatusCarrinho);
         txtTotal = findViewById(R.id.txtTotalCarrinho);
 
-        // Os botões ficam no painel do total do XML existente.
+        // Mantém as ações dentro do resumo rolável do pedido.
         LinearLayout painel = (LinearLayout) txtTotal.getParent();
         btnConfirmar = criarBotao("Confirmar pedido", "#00796B");
-        btnUltimoPedido = criarBotao("Ver último pedido", "#00796B");
+        btnUltimoPedido = criarBotao("Ver último pedido", "#FFFFFF");
+        btnUltimoPedido.setTextColor(Color.parseColor("#00796B"));
+        btnUltimoPedido.setStrokeColor(ColorStateList.valueOf(Color.parseColor("#00796B")));
+        btnUltimoPedido.setStrokeWidth(dp(1));
         for (MaterialButton botao : new MaterialButton[]{btnConfirmar, btnUltimoPedido}) {
             LinearLayout.LayoutParams parametros = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
@@ -170,17 +172,16 @@ public class CarrinhoActivity extends AppCompatActivity {
     }
 
     private void adicionarCard(Carrinho.Item item) {
+        boolean bloqueado = enviando || carrinho.temPedidoPendente();
+
         LinearLayout card = new LinearLayout(this);
         card.setOrientation(LinearLayout.VERTICAL);
         card.setPadding(dp(16), dp(16), dp(16), dp(16));
-        card.setBackgroundResource(R.drawable.fundo_card_produto);
-
-        LinearLayout.LayoutParams parametrosCard =
-                new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT
-                );
-
+        card.setBackgroundResource(R.drawable.fundo_card_carrinho);
+        LinearLayout.LayoutParams parametrosCard = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
         parametrosCard.bottomMargin = dp(12);
         card.setLayoutParams(parametrosCard);
 
@@ -189,114 +190,76 @@ public class CarrinhoActivity extends AppCompatActivity {
         cabecalho.setGravity(Gravity.CENTER_VERTICAL);
 
         ImageView imagem = new ImageView(this);
-        imagem.setLayoutParams(
-                new LinearLayout.LayoutParams(dp(64), dp(64))
-        );
-        imagem.setContentDescription("Foto de " + item.getNome());
-
-        Glide.with(this)
-                .load(item.getUrlImagem())
-                .placeholder(android.R.drawable.ic_menu_gallery)
-                .error(android.R.drawable.ic_menu_gallery)
-                .fallback(android.R.drawable.ic_menu_gallery)
-                .centerInside()
-                .into(imagem);
-
+        imagem.setLayoutParams(new LinearLayout.LayoutParams(dp(72), dp(88)));
+        imagem.setPadding(dp(6), dp(6), dp(6), dp(6));
+        imagem.setBackgroundResource(R.drawable.fundo_imagem_produto);
+        ImagensProduto.carregar(imagem, item.getNome(), item.getUrlImagem());
         cabecalho.addView(imagem);
 
         LinearLayout informacoes = new LinearLayout(this);
         informacoes.setOrientation(LinearLayout.VERTICAL);
-
-        LinearLayout.LayoutParams parametrosInformacoes =
-                new LinearLayout.LayoutParams(
-                        0,
-                        LinearLayout.LayoutParams.WRAP_CONTENT,
-                        1
-                );
-
-        parametrosInformacoes.leftMargin = dp(12);
+        LinearLayout.LayoutParams parametrosInformacoes = new LinearLayout.LayoutParams(
+                0, LinearLayout.LayoutParams.WRAP_CONTENT, 1
+        );
+        parametrosInformacoes.setMarginStart(dp(12));
         informacoes.setLayoutParams(parametrosInformacoes);
-
-        TextView nome = criarTexto(
-                item.getNome(), 18, "#173D36", true
-        );
-
+        informacoes.addView(criarTexto(item.getNome(), 16, "#173D36", true));
         TextView preco = criarTexto(
-                "Preço unitário: " + moeda.format(item.getPreco()),
-                14,
-                "#555555",
-                false
+                moeda.format(item.getPreco()) + " por unidade", 14, "#586E75", false
         );
-
-        informacoes.addView(nome);
+        preco.setPadding(0, dp(6), 0, 0);
         informacoes.addView(preco);
         cabecalho.addView(informacoes);
         card.addView(cabecalho);
 
-        TextView quantidade = criarTexto(
-                "Quantidade: " + item.getQuantidade(),
-                16,
-                "#173D36",
-                true
-        );
-        quantidade.setPadding(0, dp(12), 0, dp(4));
-        card.addView(quantidade);
+        TextView rotulo = criarTexto("Quantidade", 12, "#586E75", false);
+        rotulo.setPadding(0, dp(16), 0, dp(4));
+        card.addView(rotulo);
 
         LinearLayout controles = new LinearLayout(this);
         controles.setOrientation(LinearLayout.HORIZONTAL);
         controles.setGravity(Gravity.CENTER_VERTICAL);
 
-        MaterialButton diminuir = criarBotao("−", "#00796B");
-        diminuir.setContentDescription(
-                "Diminuir quantidade de " + item.getNome()
-        );
-        diminuir.setEnabled(!carrinho.temPedidoPendente() && item.getQuantidade() > 1);
-        diminuir.setOnClickListener(view -> alterarQuantidade(
-                item,
-                item.getQuantidade() - 1
-        ));
+        MaterialButton diminuir = criarBotao("−", "#E6F3F0");
+        diminuir.setTextColor(Color.parseColor("#00796B"));
+        diminuir.setLayoutParams(new LinearLayout.LayoutParams(
+                dp(48), LinearLayout.LayoutParams.WRAP_CONTENT));
+        diminuir.setContentDescription("Diminuir quantidade de " + item.getNome());
+        diminuir.setEnabled(!bloqueado && item.getQuantidade() > 1);
+        diminuir.setOnClickListener(view -> alterarQuantidade(item, item.getQuantidade() - 1));
         controles.addView(diminuir);
 
-        MaterialButton aumentar = criarBotao("+", "#00796B");
-        aumentar.setContentDescription(
-                "Aumentar quantidade de " + item.getNome()
+        TextView quantidade = criarTexto(
+                String.valueOf(item.getQuantidade()), 16, "#173D36", true
         );
-        aumentar.setEnabled(
-                !carrinho.temPedidoPendente() && item.getQuantidade() < item.getEstoque()
-        );
-        aumentar.setOnClickListener(view -> alterarQuantidade(
-                item,
-                item.getQuantidade() + 1
-        ));
+        quantidade.setGravity(Gravity.CENTER);
+        quantidade.setPadding(dp(4), dp(8), dp(4), dp(8));
+        quantidade.setContentDescription("Quantidade: " + item.getQuantidade());
+        quantidade.setLayoutParams(new LinearLayout.LayoutParams(
+                0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
+        controles.addView(quantidade);
+
+        MaterialButton aumentar = criarBotao("+", "#E6F3F0");
+        aumentar.setTextColor(Color.parseColor("#00796B"));
+        aumentar.setLayoutParams(new LinearLayout.LayoutParams(
+                dp(48), LinearLayout.LayoutParams.WRAP_CONTENT));
+        aumentar.setContentDescription("Aumentar quantidade de " + item.getNome());
+        aumentar.setEnabled(!bloqueado && item.getQuantidade() < item.getEstoque());
+        aumentar.setOnClickListener(view -> alterarQuantidade(item, item.getQuantidade() + 1));
         controles.addView(aumentar);
 
-        card.addView(controles);
-
-        TextView subtotal = criarTexto(
-                "Subtotal: " + moeda.format(item.getSubtotal()),
-                18,
-                "#00796B",
-                true
-        );
-        subtotal.setPadding(0, dp(8), 0, dp(8));
-        card.addView(subtotal);
-
-        MaterialButton remover = criarBotao(
-                "Remover produto", "#B3261E"
-        );
-
-        remover.setLayoutParams(
-                new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT
-                )
-        );
-
-        remover.setContentDescription(
-                "Remover " + item.getNome() + " do carrinho"
-        );
-
-        remover.setEnabled(!carrinho.temPedidoPendente());
+        MaterialButton remover = criarBotao("", "#FFFFFF");
+        LinearLayout.LayoutParams parametrosRemover = new LinearLayout.LayoutParams(
+                dp(48), LinearLayout.LayoutParams.WRAP_CONTENT);
+        parametrosRemover.setMarginStart(dp(8));
+        remover.setLayoutParams(parametrosRemover);
+        remover.setPadding(dp(12), dp(12), dp(12), dp(12));
+        remover.setIconResource(R.drawable.ic_remover_carrinho);
+        remover.setIconTint(ColorStateList.valueOf(Color.parseColor("#B3261E")));
+        remover.setIconSize(dp(24));
+        remover.setIconPadding(0);
+        remover.setContentDescription("Remover " + item.getNome() + " do carrinho");
+        remover.setEnabled(!bloqueado);
         remover.setOnClickListener(view -> {
             try {
                 carrinho.remover(item.getProdutoId());
@@ -305,8 +268,14 @@ public class CarrinhoActivity extends AppCompatActivity {
                 mostrarErro(erro);
             }
         });
+        controles.addView(remover);
+        card.addView(controles);
 
-        card.addView(remover);
+        TextView subtotal = criarTexto(
+                "Subtotal: " + moeda.format(item.getSubtotal()), 16, "#00796B", true
+        );
+        subtotal.setPadding(0, dp(12), 0, 0);
+        card.addView(subtotal);
         listaItens.addView(card);
     }
 
@@ -527,6 +496,11 @@ public class CarrinhoActivity extends AppCompatActivity {
         botao.setAllCaps(false);
         botao.setTextColor(Color.WHITE);
         botao.setTextSize(16);
+        botao.setMinWidth(0);
+        botao.setMinimumWidth(0);
+        botao.setPadding(dp(12), dp(12), dp(12), dp(12));
+        botao.setInsetTop(0);
+        botao.setInsetBottom(0);
         botao.setMinHeight(dp(48));
         botao.setMinimumHeight(dp(48));
         botao.setCornerRadius(dp(12));

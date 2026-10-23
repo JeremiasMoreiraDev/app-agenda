@@ -1,12 +1,12 @@
 package com.example.catalogoprodutos;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.TextView;
 import android.widget.ImageView;
-import com.bumptech.glide.Glide;
+import android.widget.TextView;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -18,9 +18,17 @@ public class ProdutoAdapter extends BaseAdapter {
     private final List<Produto> produtos = new ArrayList<>();
 
     private final NumberFormat moeda =
-            NumberFormat.getCurrencyInstance(
-                    new Locale("pt", "BR")
-            );
+            NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
+
+    private final boolean modoCatalogo;
+
+    public ProdutoAdapter() {
+        this(false);
+    }
+
+    public ProdutoAdapter(boolean modoCatalogo) {
+        this.modoCatalogo = modoCatalogo;
+    }
 
     public void atualizarProdutos(List<Produto> novosProdutos) {
         produtos.clear();
@@ -41,63 +49,66 @@ public class ProdutoAdapter extends BaseAdapter {
     @Override
     public long getItemId(int position) {
         Long id = getItem(position).getId();
-        return id != null ? id : position;
+        return id == null ? position : id;
     }
 
     @Override
-    public View getView(int position, View convertView,
-                        ViewGroup parent) {
-
+    public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {
-            convertView = LayoutInflater
-                    .from(parent.getContext())
-                    .inflate(R.layout.item_produto, parent, false);
+            int layout = modoCatalogo
+                    ? R.layout.item_produto_catalogo
+                    : R.layout.item_produto_admin;
+
+            convertView = LayoutInflater.from(parent.getContext())
+                    .inflate(layout, parent, false);
         }
 
         Produto produto = getItem(position);
 
         ImageView imagem = convertView.findViewById(R.id.imgProduto);
-
-        String urlImagem = produto.getUrlImagem();
-
-        if (urlImagem != null) {
-            urlImagem = urlImagem.trim();
-
-            if (urlImagem.isEmpty() || urlImagem.equalsIgnoreCase("null")) {
-                urlImagem = null;
-            }
-        }
-
-        Glide.with(imagem)
-                .load(urlImagem)
-                .placeholder(android.R.drawable.ic_menu_gallery)
-                .fallback(android.R.drawable.ic_menu_gallery)
-                .error(android.R.drawable.ic_menu_gallery)
-                .centerInside()
-                .into(imagem);
-
         TextView nome = convertView.findViewById(R.id.txtNome);
-        TextView categoria =
-                convertView.findViewById(R.id.txtCategoria);
+        TextView categoria = convertView.findViewById(R.id.txtCategoria);
         TextView preco = convertView.findViewById(R.id.txtPreco);
-        TextView estoque =
-                convertView.findViewById(R.id.txtEstoque);
+        TextView estoque = convertView.findViewById(R.id.txtEstoque);
+
+        ImagensProduto.carregar(
+                imagem,
+                produto.getNome(),
+                produto.getUrlImagem()
+        );
 
         nome.setText(produto.getNome());
-        categoria.setText(produto.getCategoria());
 
-        if (produto.getPreco() != null) {
-            preco.setText(moeda.format(produto.getPreco()));
-        } else {
-            preco.setText("Preço não informado");
-        }
+        categoria.setText(produto.getCategoria());
+        categoria.setVisibility(modoCatalogo ? View.VISIBLE : View.GONE);
+
+        preco.setText(
+                produto.getPreco() == null
+                        ? "Preço não informado"
+                        : moeda.format(produto.getPreco())
+        );
+
+        preco.setTextColor(Color.parseColor(
+                modoCatalogo ? "#173D36" : "#00796B"
+        ));
 
         Integer quantidade = produto.getQuantidadeEstoque();
+        boolean disponivel = quantidade != null && quantidade > 0;
 
-        if (quantidade != null && quantidade > 0) {
-            estoque.setText("Disponível em estoque");
+        if (modoCatalogo) {
+            estoque.setText(
+                    disponivel ? "Disponível" : "Indisponível"
+            );
+
+            estoque.setTextColor(Color.parseColor(
+                    disponivel ? "#00796B" : "#B3261E"
+            ));
         } else {
-            estoque.setText("Indisponível");
+            estoque.setText(
+                    "Em estoque: " + (quantidade == null ? 0 : quantidade)
+            );
+
+            estoque.setTextColor(Color.parseColor("#586E75"));
         }
 
         return convertView;

@@ -18,7 +18,6 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import android.view.View;
 
-import com.bumptech.glide.Glide;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -366,24 +365,11 @@ public class DetalheProdutoActivity extends AppCompatActivity {
                         : "Indisponível em estoque"
         );
 
-        String urlImagem = dados.getStringExtra("urlImagem");
-
-        if (urlImagem != null) {
-            urlImagem = urlImagem.trim();
-
-            if (urlImagem.isEmpty()
-                    || urlImagem.equalsIgnoreCase("null")) {
-                urlImagem = null;
-            }
-        }
-
-        Glide.with(this)
-                .load(urlImagem)
-                .placeholder(android.R.drawable.ic_menu_gallery)
-                .fallback(android.R.drawable.ic_menu_gallery)
-                .error(android.R.drawable.ic_menu_gallery)
-                .fitCenter()
-                .into(imagem);
+        ImagensProduto.carregar(
+                imagem,
+                dados.getStringExtra("nome"),
+                dados.getStringExtra("urlImagem")
+        );
     }
 
     @Override
